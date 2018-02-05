@@ -382,7 +382,11 @@ void initH(MAT* M){
     for(j=0;j<M->n;j++){
       sum=sum+M->e[i][j];
     }
-    if (sum!=0){
+    if (sum=0){
+      for(j=0;j<M->n;j++){
+        M->e[i][j]=(double)(1/M->n);
+      }
+    }else{
       for(j=0;j<M->n;j++){
         M->e[i][j]=M->e[i][j]/sum;
       }
@@ -405,12 +409,14 @@ void iteratematmat( MAT * R, MAT * H)
 			somme = 0;
 			for (k = 0; k < R->n; ++k)
 			{
-				somme += R->e[i][k] * H->e[k][j];
+				somme += (R->e[i][k]) * (H->e[k][j]);
 			}
 			R->e[i][j] = somme;
 		}
 	}
 }
+
+
   
 void iteratevectmat( VEC * R, MAT * H)
 {
@@ -433,17 +439,28 @@ int main()
 {
   FILE *fp;
   MAT *M;
+  VEC *R;
 
   fp = fopen( "g.dat", "r" );
   M = m_input( fp );
   fclose( fp );
 
-  /* Working with sparse matrix */
-  /*MAT *SM;
   m_output( stdout, M );
   initH(M);
   m_output( stdout, M);
-  m_free( M );
+
+  //initializing R to R0
+
+  R=v_get(M->n);
+  int i;
+  for(i=0;i<R->dim;i++){
+    R->e[i]=(double) 1/(R->dim);
+  }
+
+  v_output(stdout, R);
+  
+
+
 
   /* Working with sparse matrix */
   /*
@@ -456,11 +473,10 @@ int main()
   sm_free( SM );
 */
   //test function iteratematmat
-  /*m_output( stdout, M);
-  iterate(M,M);
-  m_output( stdout, M);
+  
+  // free everything
   m_free( M );
-*/
+  v_free(R);
 
   return 0;
 }
