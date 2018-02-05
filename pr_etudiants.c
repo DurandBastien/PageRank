@@ -371,6 +371,25 @@ void sm_output( FILE *fp, SMAT *M )
 
 /* End of Sparse Matrix section. */
 /*********************************/
+void initH(MAT* M){
+
+  u_int i;
+  u_int j;
+  u_int sum;
+
+  for(i=0;i<M->m;i++){
+    sum=0;
+    for(j=0;j<M->n;j++){
+      sum=sum+M->e[i][j];
+    }
+    if (sum!=0){
+      for(j=0;j<M->n;j++){
+        M->e[i][j]=M->e[i][j]/sum;
+      }
+    }
+  }
+
+}
 
 void iteratematmat( MAT * R, MAT * H)
 {
@@ -421,6 +440,14 @@ int main()
 
   /* Working with sparse matrix */
   /*MAT *SM;
+  m_output( stdout, M );
+  initH(M);
+  m_output( stdout, M);
+  m_free( M );
+
+  /* Working with sparse matrix */
+  /*
+  SMAT *SM;
   fp = fopen( "genetic.dat", "r" );
   SM = sm_input( fp );
   fclose( fp );
