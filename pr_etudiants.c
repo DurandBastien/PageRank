@@ -372,6 +372,44 @@ void sm_output( FILE *fp, SMAT *M )
 /* End of Sparse Matrix section. */
 /*********************************/
 
+void iteratematmat( MAT * R, MAT * H)
+{
+	int somme;
+
+	int i;
+	int j;
+	int k;
+	for (i = 0; i < R->m; ++i)
+	{
+		for (j = 0; j < R->n; ++j)
+		{
+			somme = 0;
+			for (k = 0; k < R->n; ++k)
+			{
+				somme += R->e[i][k] * H->e[k][j];
+			}
+			R->e[i][j] = somme;
+		}
+	}
+}
+  
+void iteratevectmat( VEC * R, MAT * H)
+{
+  int somme;
+
+  int i;
+  int j;
+  for (i = 0; i < R->dim; ++i)
+  {
+    somme = 0;
+    for (j = 0; j < R->dim; ++j)
+    {
+      somme += R->e[j] * H->e[j][i];
+    }
+    R->e[i] = somme;
+  }
+}
+
 int main()
 {
   FILE *fp;
@@ -380,17 +418,22 @@ int main()
   fp = fopen( "g.dat", "r" );
   M = m_input( fp );
   fclose( fp );
-  m_output( stdout, M );
-  m_free( M );
 
   /* Working with sparse matrix */
-  SMAT *SM;
+  /*MAT *SM;
   fp = fopen( "genetic.dat", "r" );
   SM = sm_input( fp );
   fclose( fp );
   fp = fopen( "test.dat", "w" );
   sm_output( fp, SM );
   sm_free( SM );
+*/
+  //test function iteratematmat
+  /*m_output( stdout, M);
+  iterate(M,M);
+  m_output( stdout, M);
+  m_free( M );
+*/
 
   return 0;
 }
