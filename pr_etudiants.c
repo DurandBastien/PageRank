@@ -420,7 +420,8 @@ void iteratematmat( MAT * R, MAT * H)
   
 void iteratevectmat( VEC * R, MAT * H)
 {
-  int somme;
+  double somme;
+  VEC * Rcopy = v_get(R->dim);
 
   int i;
   int j;
@@ -431,8 +432,12 @@ void iteratevectmat( VEC * R, MAT * H)
     {
       somme += R->e[j] * H->e[j][i];
     }
-    R->e[i] = somme;
+    Rcopy->e[i] = somme;
   }
+
+  v_output(stdout,Rcopy);
+  v_free(R);
+  *R = *Rcopy;
 }
 
 int main()
@@ -458,8 +463,14 @@ int main()
   }
 
   v_output(stdout, R);
-  
 
+  iteratevectmat(R, M);
+
+  v_output(stdout, R);
+
+  // free everything
+  m_free( M );
+  v_free(R)
 
 
   /* Working with sparse matrix */
@@ -472,11 +483,6 @@ int main()
   sm_output( fp, SM );
   sm_free( SM );
 */
-  //test function iteratematmat
-  
-  // free everything
-  m_free( M );
-  v_free(R);
 
   return 0;
 }
