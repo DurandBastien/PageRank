@@ -435,9 +435,27 @@ void iteratevectmat( VEC * R, MAT * H)
     Rcopy->e[i] = somme;
   }
 
-  v_output(stdout,Rcopy);
-  v_free(R);
-  *R = *Rcopy;
+  //v_output(stdout,Rcopy);
+
+  for (i = 0; i < R->dim; ++i)
+  {
+     R->e[i] = Rcopy->e[i];
+  }
+
+  v_free(Rcopy);
+}
+
+void ergodique(MAT * M, double alpha)
+{
+  int i;
+  int j;
+  for (j = 0; j < M->m; ++j)
+  {
+    for (i = 0; i < M->n; ++i)
+    {
+      M->e[i][j] = alpha * M->e[i][j] + (1 - alpha) / (M->m);
+    }
+  }
 }
 
 int main()
@@ -464,9 +482,25 @@ int main()
 
   v_output(stdout, R);
 
-  iteratevectmat(R, M);
+  ergodique(M, 0.5);
+
+  m_output(stdout, M);
+
+  for (i = 0; i < 10; ++i)
+  {
+    iteratevectmat(R, M);
+    v_output(stdout, R);
+  }
+
+
+
+  /*for (i = 0; i < 10; ++i)
+  {
+    iteratevectmat(R, M);
+  }
 
   v_output(stdout, R);
+  */
 
   // free everything
   m_free( M );
