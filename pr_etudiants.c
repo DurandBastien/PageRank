@@ -414,7 +414,8 @@ void iteratematmat( MAT * R, MAT * H)
   
 void iteratevectmat( VEC * R, MAT * H)
 {
-  int somme;
+  double somme;
+  VEC * Rcopy = v_get(R->dim);
 
   int i;
   int j;
@@ -425,8 +426,12 @@ void iteratevectmat( VEC * R, MAT * H)
     {
       somme += R->e[j] * H->e[j][i];
     }
-    R->e[i] = somme;
+    Rcopy->e[i] = somme;
   }
+
+  v_output(stdout,Rcopy);
+  v_free(R);
+  *R = *Rcopy;
 }
 
 int main()
@@ -455,12 +460,24 @@ int main()
   sm_output( fp, SM );
   sm_free( SM );
 */
-  //test function iteratematmat
-  /*m_output( stdout, M);
-  iterate(M,M);
-  m_output( stdout, M);
-  m_free( M );
-*/
+
+  initH(M);
+
+  m_output(stdout, M);
+
+  VEC * R = v_get(M->m);
+
+  int i;
+  for (i = 0; i < R->dim; ++i)
+  {
+    R->e[i] =  (double)1/(R->dim);
+  }
+
+  v_output(stdout, R);
+
+  iteratevectmat(R, M);
+
+  v_output(stdout, R);
 
   return 0;
 }
