@@ -382,9 +382,9 @@ void initH(MAT* M){
     for(j=0;j<M->n;j++){
       sum=sum+M->e[i][j];
     }
-    if (sum=0){
+    if (sum==0){
       for(j=0;j<M->n;j++){
-        M->e[i][j]=(double)(1/M->n);
+        M->e[i][j]=(double) 1/M->n;
       }
     }else{
       for(j=0;j<M->n;j++){
@@ -470,7 +470,7 @@ int main()
 
   // free everything
   m_free( M );
-  v_free(R)
+  v_free(R);
 
 
   /* Working with sparse matrix */
